@@ -1,9 +1,9 @@
 # Exercício - Página de Cadastro de Usuário
 
 
-Implemente um fluxo completo de cadastro e login de usuário utilizando HTML, CSS e
-JavaScript, com comunicação a uma API fictícia. O fluxo deve contemplar validações,
-persistência e edição de dados do cliente. Passos do Exercício:
+# Implemente um fluxo completo de cadastro e login de usuário utilizando HTML, CSS e JavaScript, com comunicação a uma API fictícia. O fluxo deve contemplar validações, persistência e edição de dados do cliente. 
+
+# Passos do Exercício:
 ● Criar uma página inicial com um campo de digitação de e-mail e um botão 'Avançar'.
 ● Ao clicar em 'Avançar', realizar uma pesquisa em uma API verificando se o e-mail já está
 cadastrado.
