@@ -2,6 +2,12 @@
 
 Implemente um fluxo completo de **cadastro e login de usuário** utilizando **HTML, CSS e JavaScript**, com comunicação a uma **API fictícia**. O fluxo deve contemplar **validações, persistência e edição de dados do cliente**.
 
+## 👥 Grupo 3 - Alunos:
+   ● Bruno Nyland
+   ● Danilo Lima
+   ● Jean Coelho
+   ● Marcos Ceo
+
 ## 🧭 Passos do Exercício
 
 1. **Página Inicial**
