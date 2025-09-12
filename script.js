@@ -1,20 +1,32 @@
 // Classe para gerenciar o armazenamento local
 class LocalStorageManager {
     static saveUser(user) {
-        localStorage.setItem('caixaverso_user', JSON.stringify(user));
+        localStorage.setItem(user.email, JSON.stringify(user));
     }
 
-    static getUser() {
-        const user = localStorage.getItem('caixaverso_user');
+    static getUser(email) {
+        const user = localStorage.getItem(email);
         return user ? JSON.parse(user) : null;
     }
 
-    static clearUser() {
-        localStorage.removeItem('caixaverso_user');
+    static clearUser(email) {
+        localStorage.removeItem(email);
+    }
+
+    static saveToken(token) {
+        return localStorage.setItem('token', token);
+    }
+
+    static getToken() {
+        return localStorage.getItem('token');
+    }
+
+    static clearToken() {
+        localStorage.removeItem('token');
     }
 
     static isLoggedIn() {
-        return this.getUser() !== null;
+        return this.getToken() !== null;
     }
 }
 
@@ -67,14 +79,14 @@ class Validator {
     }
 }
 
-// Classe para simular API
+// Classe para simular API com delay
 class APISimulator {
     static async login(email, password) {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                const user = LocalStorageManager.getUser();
+                const user = LocalStorageManager.getUser(email);
                 if (user && user.email === email && user.password === password) {
-                    resolve({ success: true, user: user });
+                    resolve({ success: true, user: user, token: email });
                 } else {
                     reject({ success: false, message: 'Email ou senha incorretos' });
                 }
@@ -85,11 +97,9 @@ class APISimulator {
     static async register(userData) {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                const existingUser = LocalStorageManager.getUser();
+                const existingUser = LocalStorageManager.getUser(userData.email);
                 if (existingUser && existingUser.email === userData.email) {
                     reject({ success: false, message: 'Email já cadastrado' });
-                } else if (existingUser && existingUser.cpf === userData.cpf) {
-                    reject({ success: false, message: 'CPF já cadastrado' });
                 } else {
                     const user = {
                         ...userData,
@@ -97,16 +107,16 @@ class APISimulator {
                         createdAt: new Date().toISOString()
                     };
                     LocalStorageManager.saveUser(user);
-                    resolve({ success: true, user: user });
+                    resolve({ success: true, user: user, token: userData.email });
                 }
             }, 1500);
         });
     }
 
-    static async updateProfile(userData) {
+    static async updateProfile(email, userData) {
         return new Promise((resolve) => {
             setTimeout(() => {
-                const currentUser = LocalStorageManager.getUser();
+                const currentUser = LocalStorageManager.getUser(email);
                 const updatedUser = { ...currentUser, ...userData };
                 LocalStorageManager.saveUser(updatedUser);
                 resolve({ success: true, user: updatedUser });
@@ -119,6 +129,7 @@ class APISimulator {
 class CaixaversoApp {
     constructor() {
         this.currentPage = null;
+        this.messageQueue = [];
         this.init();
     }
 
@@ -292,11 +303,37 @@ class CaixaversoApp {
         messageElement.className = type === 'success' ? 'success-message' : 'error-banner';
         messageElement.textContent = message;
 
-        const formContainer = document.querySelector('.page.active .form-container') ||
-                             document.querySelector('.page.active .profile-container');
-        if (formContainer) {
-            formContainer.insertBefore(messageElement, formContainer.firstElementChild);
-        }
+        // Adiciona à fila de mensagens
+        this.messageQueue.push(messageElement);
+
+        // Calcula a posição baseada na quantidade de mensagens
+        const messageIndex = this.messageQueue.length - 1;
+        const topPosition = 20 + (messageIndex * 70); // 70px de espaçamento entre mensagens
+        messageElement.style.top = `${topPosition}px`;
+
+        // Insere a mensagem no body
+        document.body.appendChild(messageElement);
+
+        // Remove a mensagem após 3 segundos com efeito de fade out
+        setTimeout(() => {
+            messageElement.classList.add('fade-out');
+            setTimeout(() => {
+                // Remove da fila e reposiciona as mensagens restantes
+                const index = this.messageQueue.indexOf(messageElement);
+                if (index > -1) {
+                    this.messageQueue.splice(index, 1);
+                    this.repositionMessages();
+                }
+                messageElement.remove();
+            }, 500); // Tempo da transição CSS
+        }, 2500); // Mostra por 2.5 segundos antes de começar fade out
+    }
+
+    repositionMessages() {
+        this.messageQueue.forEach((message, index) => {
+            const topPosition = 20 + (index * 70);
+            message.style.top = `${topPosition}px`;
+        });
     }
 
     setLoading(button, loading = true) {
@@ -337,7 +374,7 @@ class CaixaversoApp {
 
     processEmailCheck(email) {
         // Verifica se o email existe
-        const existingUser = LocalStorageManager.getUser();
+        const existingUser = LocalStorageManager.getUser(email);
         if (existingUser && existingUser.email === email) {
             // Email existe, vai para login
             document.getElementById('login-email-display').textContent = email;
@@ -364,8 +401,10 @@ class CaixaversoApp {
         try {
             const response = await APISimulator.login(email, password);
             if (response.success) {
+                LocalStorageManager.saveToken(response.token);
                 this.showPage('profile-page');
                 this.loadProfile();
+                this.showMessage('Usuário Logado com sucesso!','success');
             }
         } catch (error) {
             this.showMessage(error.message);
@@ -427,6 +466,7 @@ class CaixaversoApp {
         try {
             const response = await APISimulator.register(formData);
             if (response.success) {
+                LocalStorageManager.saveToken(response.token);
                 this.showMessage('Cadastro realizado com sucesso!', 'success');
                 setTimeout(() => {
                     this.showPage('profile-page');
@@ -441,7 +481,8 @@ class CaixaversoApp {
     }
 
     loadProfile() {
-        const user = LocalStorageManager.getUser();
+        const email = LocalStorageManager.getToken();
+        const user = LocalStorageManager.getUser(email);
         if (user) {
             document.getElementById('profile-name').textContent = user.name;
             document.getElementById('profile-email').textContent = user.email;
@@ -451,20 +492,20 @@ class CaixaversoApp {
 
             // Preenche formulário de edição
             document.getElementById('edit-name').value = user.name;
-            document.getElementById('edit-email').value = user.email;
             document.getElementById('edit-phone').value = user.phone;
             document.getElementById('edit-address').value = user.address;
         }
     }
 
     showEditProfile() {
+        this.loadProfile(); // Ensure edit form is filled
         this.showPage('edit-profile-page');
     }
 
     async handleSaveProfile() {
+        const email = LocalStorageManager.getToken();
         const formData = {
             name: document.getElementById('edit-name').value.trim(),
-            email: document.getElementById('edit-email').value.trim(),
             phone: document.getElementById('edit-phone').value.trim(),
             address: document.getElementById('edit-address').value.trim()
         };
@@ -472,11 +513,6 @@ class CaixaversoApp {
         // Validações
         if (!formData.name || !Validator.name(formData.name)) {
             this.showMessage('Nome inválido');
-            return;
-        }
-
-        if (!formData.email || !Validator.email(formData.email)) {
-            this.showMessage('Email inválido');
             return;
         }
 
@@ -494,7 +530,7 @@ class CaixaversoApp {
         this.setLoading(button, true);
 
         try {
-            const response = await APISimulator.updateProfile(formData);
+            const response = await APISimulator.updateProfile(email, formData);
             if (response.success) {
                 this.showMessage('Perfil atualizado com sucesso!', 'success');
                 setTimeout(() => {
@@ -510,7 +546,7 @@ class CaixaversoApp {
     }
 
     handleLogout() {
-        LocalStorageManager.clearUser();
+        LocalStorageManager.clearToken();
         this.showPage('email-page');
         // Limpa formulários
         document.querySelectorAll('input').forEach(input => {
@@ -518,6 +554,7 @@ class CaixaversoApp {
                 input.value = '';
             }
         });
+        this.showMessage('Usuário Desconectado com sucesso!','success');
     }
 }
 

@@ -75,21 +75,6 @@ caixaverso/
 - **Regex**: Validações de formato
 - **SPA Pattern**: Navegação sem reload
 
-## 🔒 Segurança
-
-- Validação completa de dados no frontend
-- Sanitização de inputs
-- Armazenamento seguro no localStorage
-- Prevenção de XSS através de manipulação DOM segura
-
-## 📱 Compatibilidade
-
-- Chrome 70+
-- Firefox 65+
-- Safari 12+
-- Edge 79+
-- Navegadores móveis modernos
-
 ## 🎯 Diferenciais Implementados
 
 - **Interface Moderna**: Design inspirado na Caixa Econômica Federal

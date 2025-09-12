@@ -259,21 +259,43 @@ body {
 .success-message {
     background: var(--success-color);
     color: var(--secondary-color);
-    padding: 10px 15px;
+    padding: 12px 20px;
     border-radius: var(--border-radius);
-    margin-bottom: 15px;
     text-align: center;
     font-weight: 500;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    min-width: 300px;
+    max-width: 90vw;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    animation: slideDown 0.4s ease;
+    transition: opacity 0.5s ease, transform 0.5s ease, top 0.3s ease;
 }
 
 .error-banner {
     background: var(--error-color);
     color: var(--secondary-color);
-    padding: 10px 15px;
+    padding: 12px 20px;
     border-radius: var(--border-radius);
-    margin-bottom: 15px;
     text-align: center;
     font-weight: 500;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    min-width: 300px;
+    max-width: 90vw;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    animation: slideDown 0.4s ease;
+    transition: opacity 0.5s ease, transform 0.5s ease, top 0.3s ease;
+}
+
+.success-message.fade-out,
+.error-banner.fade-out {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
 }
 
 /* Animações */
@@ -315,4 +337,15 @@ body {
 
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
 }
