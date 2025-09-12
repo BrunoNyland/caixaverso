@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaixaVerso - Cadastro e Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Página Inicial - Digitação de Email -->
+        <section id="email-page" class="page active">
+            <div class="logo">
+                <h1>CaixaVerso</h1>
+                <p>Sistema de Cadastro</p>
+            </div>
+            <div class="form-container">
+                <h2>Digite seu e-mail</h2>
+                <div class="input-group">
+                    <label for="email-input">E-mail</label>
+                    <input type="email" id="email-input" placeholder="seu@email.com" required>
+                    <span class="error-message" id="email-error"></span>
+                </div>
+                <button id="advance-btn" class="btn-primary">Avançar</button>
+            </div>
+        </section>
+
+        <!-- Página de Senha - Login -->
+        <section id="password-page" class="page">
+            <div class="logo">
+                <h1>CaixaVerso</h1>
+                <p>Login</p>
+            </div>
+            <div class="form-container">
+                <h2>Digite sua senha</h2>
+                <p id="login-email-display"></p>
+                <div class="input-group">
+                    <label for="password-input">Senha</label>
+                    <input type="password" id="password-input" placeholder="Digite sua senha" required>
+                    <span class="error-message" id="password-error"></span>
+                </div>
+                <button id="login-btn" class="btn-primary">Entrar</button>
+                <button id="back-to-email-btn" class="btn-secondary">Voltar</button>
+            </div>
+        </section>
+
+        <!-- Formulário de Cadastro -->
+        <section id="register-page" class="page">
+            <div class="logo">
+                <h1>CaixaVerso</h1>
+                <p>Cadastro</p>
+            </div>
+            <div class="form-container">
+                <h2>Complete seu cadastro</h2>
+                <form id="register-form">
+                    <div class="input-group">
+                        <label for="register-email">E-mail</label>
+                        <input type="email" id="register-email" readonly>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-name">Nome Completo</label>
+                        <input type="text" id="register-name" placeholder="Seu nome completo" required>
+                        <span class="error-message" id="name-error"></span>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-phone">Telefone</label>
+                        <input type="tel" id="register-phone" placeholder="(11) 99999-9999" required>
+                        <span class="error-message" id="phone-error"></span>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-address">Endereço</label>
+                        <input type="text" id="register-address" placeholder="Seu endereço completo" required>
+                        <span class="error-message" id="address-error"></span>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-cpf">CPF</label>
+                        <input type="text" id="register-cpf" placeholder="000.000.000-00" required>
+                        <span class="error-message" id="cpf-error"></span>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-password">Senha</label>
+                        <input type="password" id="register-password" placeholder="Mínimo 8 caracteres" required>
+                        <span class="error-message" id="register-password-error"></span>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-confirm-password">Confirmar Senha</label>
+                        <input type="password" id="register-confirm-password" placeholder="Digite a senha novamente" required>
+                        <span class="error-message" id="confirm-password-error"></span>
+                    </div>
+                    <button type="submit" class="btn-primary">Cadastrar</button>
+                    <button type="button" id="back-to-email-from-register-btn" class="btn-secondary">Voltar</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Perfil do Usuário -->
+        <section id="profile-page" class="page">
+            <div class="logo">
+                <h1>CaixaVerso</h1>
+                <p>Seu Perfil</p>
+            </div>
+            <div class="profile-container">
+                <h2>Dados Cadastrais</h2>
+                <div class="profile-info">
+                    <div class="info-item">
+                        <label>Nome:</label>
+                        <span id="profile-name"></span>
+                    </div>
+                    <div class="info-item">
+                        <label>E-mail:</label>
+                        <span id="profile-email"></span>
+                    </div>
+                    <div class="info-item">
+                        <label>Telefone:</label>
+                        <span id="profile-phone"></span>
+                    </div>
+                    <div class="info-item">
+                        <label>Endereço:</label>
+                        <span id="profile-address"></span>
+                    </div>
+                    <div class="info-item">
+                        <label>CPF:</label>
+                        <span id="profile-cpf"></span>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button id="edit-profile-btn" class="btn-primary">Editar Dados</button>
+                    <button id="logout-btn" class="btn-secondary">Sair</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Edição de Perfil -->
+        <section id="edit-profile-page" class="page">
+            <div class="logo">
+                <h1>CaixaVerso</h1>
+                <p>Editar Perfil</p>
+            </div>
+            <div class="form-container">
+                <h2>Editar seus dados</h2>
+                <form id="edit-profile-form">
+                    <div class="input-group">
+                        <label for="edit-name">Nome Completo</label>
+                        <input type="text" id="edit-name" required>
+                        <span class="error-message" id="edit-name-error"></span>
+                    </div>
+                    <div class="input-group">
+                        <label for="edit-phone">Telefone</label>
+                        <input type="tel" id="edit-phone" required>
+                        <span class="error-message" id="edit-phone-error"></span>
+                    </div>
+                    <div class="input-group">
+                        <label for="edit-address">Endereço</label>
+                        <input type="text" id="edit-address" required>
+                        <span class="error-message" id="edit-address-error"></span>
+                    </div>
+                    <div class="input-group">
+                        <label for="edit-password">Nova Senha (opcional)</label>
+                        <input type="password" id="edit-password" placeholder="Deixe em branco para manter">
+                        <span class="error-message" id="edit-password-error"></span>
+                    </div>
+                    <button type="submit" class="btn-primary">Salvar Alterações</button>
+                    <button type="button" id="cancel-edit-btn" class="btn-secondary">Cancelar</button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
