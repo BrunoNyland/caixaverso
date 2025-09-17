@@ -1,6 +1,6 @@
 import { LocalStorageManager } from './LocalStorageManager.js';
 import { Validator } from './Validator.js';
-import { APISimulator } from './APISimulator.js';
+import { API } from './API.js';
 
 // Classe principal da aplicação
 export class App {
@@ -104,8 +104,23 @@ export class App {
             }
         });
 
-        // Máscara para telefone
+        // Máscara para telefone no cadastro
         document.getElementById('register-phone').addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length <= 11) {
+                if (value.length <= 10) {
+                    value = value.replace(/(\d{2})(\d)/, '($1) $2');
+                    value = value.replace(/(\d{4})(\d)/, '$1-$2');
+                } else {
+                    value = value.replace(/(\d{2})(\d)/, '($1) $2');
+                    value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                }
+                e.target.value = value;
+            }
+        });
+
+        // Máscara para telefone na edição
+        document.getElementById('edit-phone').addEventListener('input', (e) => {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length <= 11) {
                 if (value.length <= 10) {
@@ -147,7 +162,8 @@ export class App {
         }
     }
 
-    checkInitialState() {
+    async checkInitialState() {
+        await API.logStatus();
         if (LocalStorageManager.isLoggedIn()) {
             this.showPage('profile-page');
             this.loadProfile();
@@ -242,24 +258,25 @@ export class App {
         const button = document.getElementById('advance-btn');
         this.setLoading(button, true);
 
-        // Simula verificação do email
-        setTimeout(() => {
+        try {
+            // Verifica se o email já existe
+            const emailExists = await API.checkEmailExists(email);
+            
+            if (emailExists) {
+                // Email existe, vai para login
+                document.getElementById('login-email-display').textContent = email;
+                // Preenche o campo username oculto para acessibilidade
+                document.getElementById('login-username').value = email;
+                this.showPage('password-page');
+            } else {
+                // Email não existe, vai para cadastro
+                document.getElementById('register-email').value = email;
+                this.showPage('register-page');
+            }
+        } catch (error) {
+            this.showMessage('Erro ao verificar email: ' + error.message);
+        } finally {
             this.setLoading(button, false);
-            this.processEmailCheck(email);
-        }, 500);
-    }
-
-    processEmailCheck(email) {
-        // Verifica se o email existe
-        const existingUser = LocalStorageManager.getUser(email);
-        if (existingUser && existingUser.email === email) {
-            // Email existe, vai para login
-            document.getElementById('login-email-display').textContent = email;
-            this.showPage('password-page');
-        } else {
-            // Email não existe, vai para cadastro
-            document.getElementById('register-email').value = email;
-            this.showPage('register-page');
         }
     }
 
@@ -276,12 +293,12 @@ export class App {
         this.setLoading(button, true);
 
         try {
-            const response = await APISimulator.login(email, password);
+            const response = await API.login(email, password);
             if (response.success) {
                 LocalStorageManager.saveToken(response.token);
                 this.showPage('profile-page');
                 this.loadProfile();
-                this.showMessage('Usuário Logado com sucesso!','success');
+                this.showMessage('Login realizado com sucesso!', 'success');
             }
         } catch (error) {
             this.showMessage(error.message);
@@ -341,7 +358,7 @@ export class App {
         this.setLoading(button, true);
 
         try {
-            const response = await APISimulator.register(formData);
+            const response = await API.register(formData);
             if (response.success) {
                 LocalStorageManager.saveToken(response.token);
                 this.showMessage('Cadastro realizado com sucesso!', 'success');
@@ -357,30 +374,49 @@ export class App {
         }
     }
 
-    loadProfile() {
-        const email = LocalStorageManager.getToken();
-        const user = LocalStorageManager.getUser(email);
-        if (user) {
-            document.getElementById('profile-name').textContent = user.name;
-            document.getElementById('profile-email').textContent = user.email;
-            document.getElementById('profile-cpf').textContent = user.cpf;
-            document.getElementById('profile-phone').textContent = user.phone;
-            document.getElementById('profile-address').textContent = user.address;
+    async loadProfile() {
+        const token = LocalStorageManager.getToken();
+        if (!token) return this.handleLogout();
 
-            // Preenche formulário de edição
-            document.getElementById('edit-name').value = user.name;
-            document.getElementById('edit-phone').value = user.phone;
-            document.getElementById('edit-address').value = user.address;
+        try {
+            const response = await API.getUserProfile(token);
+            if (response.success) {
+                const user = response.user;
+
+                document.getElementById('profile-name').textContent = user.nome;
+                document.getElementById('profile-email').textContent = user.email;
+                document.getElementById('profile-cpf').textContent = user.cpf ? user.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : '';
+                document.getElementById('profile-phone').textContent = user.telefone;
+                document.getElementById('profile-address').textContent = user.endereco;
+
+                // Preenche formulário de edição
+                document.getElementById('edit-name').value = user.nome;
+                document.getElementById('edit-phone').value = user.telefone;
+                document.getElementById('edit-address').value = user.endereco;
+                document.getElementById('edit-username').value = user.email;
+            }
+        } catch (error) {
+            console.error('Erro ao carregar perfil:', error);
+            this.showMessage('Erro ao carregar perfil: ' + error.message);
+            if (error.message.includes('Token') || error.message.includes('inválido')) {
+                this.handleLogout();
+            }
         }
     }
 
     showEditProfile() {
-        this.loadProfile(); // Ensure edit form is filled
+        this.loadProfile();
         this.showPage('edit-profile-page');
     }
 
     async handleSaveProfile() {
-        const email = LocalStorageManager.getToken();
+        const token = LocalStorageManager.getToken();
+        if (!token) {
+            this.showMessage('Token não encontrado. Faça login novamente.');
+            this.handleLogout();
+            return;
+        }
+
         const formData = {
             name: document.getElementById('edit-name').value.trim(),
             phone: document.getElementById('edit-phone').value.trim(),
@@ -407,7 +443,7 @@ export class App {
         this.setLoading(button, true);
 
         try {
-            const response = await APISimulator.updateProfile(email, formData);
+            const response = await API.updateProfile(token, formData);
             if (response.success) {
                 this.showMessage('Perfil atualizado com sucesso!', 'success');
                 setTimeout(() => {
@@ -417,6 +453,10 @@ export class App {
             }
         } catch (error) {
             this.showMessage(error.message);
+            // Se erro de token, fazer logout
+            if (error.message.includes('Token') || error.message.includes('inválido')) {
+                this.handleLogout();
+            }
         } finally {
             this.setLoading(button, false);
         }
