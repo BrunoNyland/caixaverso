@@ -22,15 +22,9 @@
 ## 🎯 Funcionalidades Implementadas
 
 - ✅ **Página Inicial SPA** com campo de email e botão "Avançar" que ao digitar verifica a existencia do email na api, caso não exista segue para cadastro, caso contrário segue para login (solita a senha)
-- ✅ **Formulário de Cadastro** completo com todos os campos
-- ✅ **Validações e Formatações** em todos os campos
-- ✅ **Envio de Dados** para API no formato JSON
-- ✅ **Sistema de Login** com email e senha
-- ✅ **Token de Acesso** simulado e salvo localmente
+- ✅ **Validações e Formatações** nos campos de input de dados
 - ✅ **Tela de Dados Cadastrais** com informações do usuário
-- ✅ **Edição de Dados** após login
-- ✅ **SPA (Single Page Application)** com navegação fluida
-- ✅ **Interface Responsiva** para desktop e mobile
+- ✅ **Edição de Dados** O usuário pode alterar seus dados após o login
 
 ## 🔧 Validações Implementadas
 
@@ -40,7 +34,7 @@
 - **Nome**: Mínimo 2 caracteres, apenas letras e espaços
 - **Endereço**: Mínimo 5 caracteres
 - **Senha**: Mínimo 6 caracteres
-- **Confirmação**: Deve coincidir com a senha
+- **Confirmação de Senha**: Deve coincidir com a senha
 
 ## 🔧 Modificações realizadas na API do professor
 
@@ -48,6 +42,6 @@
 
 - **Servidor de Arquivos Estáticos com o Express**: Para servir os arquivos do site da pasta raiz do projeto juntamente com a API
 
-
+- **README.txt da API feito pelo COPILOT**: Utilizei o Copilot para criar uma documentação detalhada da API para facilitar o entendimento
 
 
