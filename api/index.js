@@ -10,10 +10,10 @@ app.use(express.static(path.join(__dirname, '..')));
 
 // Configuração CORS
 app.use(cors({
-  origin: ['http://localhost:8080', 'http://127.0.0.1:5500', 'http://localhost:3000'],
+  origin: ['*'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  credentials: false
 }));
 
 app.use(express.json());

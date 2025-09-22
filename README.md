@@ -42,6 +42,6 @@
 
 - **Servidor de Arquivos Estáticos com o Express**: Para servir os arquivos do site da pasta raiz do projeto juntamente com a API
 
-- **README.txt da API feito pelo COPILOT**: Utilizei o Copilot para criar uma documentação detalhada da API para facilitar o entendimento
+- **Documentação README.txt da API feito com auxilio do COPILOT**: Utilizei o Copilot para criar uma documentação detalhada da API fornecida pelo professor para facilitar o entendimento. 
 
 

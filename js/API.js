@@ -153,8 +153,8 @@ export class API {
     // Verificar se a API está disponível
     static async isAvailable() {
         try {
-            const response = await fetch(`${this.baseURL}`);
-            return response.status === 404; // 204 = disponível, 409 = email existe (API funcionando)
+            await fetch(`${this.baseURL}/users/validate-email?email=teste`);
+            return true;
         } catch (error) {
             return false;
         }

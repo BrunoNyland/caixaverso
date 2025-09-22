@@ -35,11 +35,10 @@ export class App {
             this.handleSaveProfile();
         });
 
-        // Validações em tempo real
-        this.setupRealTimeValidation();
-
         // Máscaras
         this.setupMasks();
+        // Validações em tempo real
+        this.setupRealTimeValidation();
     }
 
     setupRealTimeValidation() {
@@ -96,6 +95,7 @@ export class App {
         // Máscara para CPF
         document.getElementById('register-cpf').addEventListener('input', (e) => {
             let value = e.target.value.replace(/\D/g, '');
+            value = value.substring(0, 11);
             if (value.length <= 11) {
                 value = value.replace(/(\d{3})(\d)/, '$1.$2');
                 value = value.replace(/(\d{3})(\d)/, '$1.$2');
@@ -104,9 +104,44 @@ export class App {
             }
         });
 
+        // Cria classe uppercase e lowercase para limitar a entrada dos dados
+        document.querySelectorAll("input").forEach(input => {
+            if (input.classList.contains('uppercase')){
+                input.addEventListener("blur", function () {
+                    input.value = input.value.toUpperCase();
+                });
+                input.addEventListener("input", function () {
+                    const start = input.selectionStart;
+                    const end = input.selectionEnd;
+                    input.value = input.value.toUpperCase();
+                    try {
+                        input.setSelectionRange(start, end);
+                    } catch (e) {
+                        // Ignora erro para tipos que não suportam seleção
+                    }
+                });
+            }
+            if (input.classList.contains('lowercase')){
+                input.addEventListener("blur", function () {
+                    input.value = input.value.toLowerCase();
+                });
+                input.addEventListener("input", function () {
+                    const start = input.selectionStart;
+                    const end = input.selectionEnd;
+                    input.value = input.value.toLowerCase();
+                    try {
+                        input.setSelectionRange(start, end);
+                    } catch (e) {
+                        // Ignora erro para tipos que não suportam seleção
+                    }
+                });
+            }
+        });
+
         // Máscara para telefone no cadastro
         document.getElementById('register-phone').addEventListener('input', (e) => {
             let value = e.target.value.replace(/\D/g, '');
+            value = value.substring(0, 11); // Limita a 11 dígitos
             if (value.length <= 11) {
                 if (value.length <= 10) {
                     value = value.replace(/(\d{2})(\d)/, '($1) $2');
@@ -122,6 +157,7 @@ export class App {
         // Máscara para telefone na edição
         document.getElementById('edit-phone').addEventListener('input', (e) => {
             let value = e.target.value.replace(/\D/g, '');
+            value = value.substring(0, 11); // Limita a 11 dígitos
             if (value.length <= 11) {
                 if (value.length <= 10) {
                     value = value.replace(/(\d{2})(\d)/, '($1) $2');
@@ -184,6 +220,13 @@ export class App {
 
         // Limpa mensagens de erro/sucesso
         this.clearMessages();
+
+        // Foco automático baseado na página
+        if (pageId === 'email-page') {
+            document.getElementById('email-input').focus();
+        } else if (pageId === 'password-page') {
+            document.getElementById('password-input').focus();
+        }
     }
 
     clearMessages() {
@@ -268,10 +311,12 @@ export class App {
                 // Preenche o campo username oculto para acessibilidade
                 document.getElementById('login-username').value = email;
                 this.showPage('password-page');
+                document.getElementById('password-input').focus();
             } else {
                 // Email não existe, vai para cadastro
                 document.getElementById('register-email').value = email;
                 this.showPage('register-page');
+                document.getElementById('register-name').focus();
             }
         } catch (error) {
             this.showMessage('Erro ao verificar email: ' + error.message);
