@@ -1,18 +1,27 @@
-# CaixaVerso - Sistema de Cadastro e Login ✅
+# Trabalho Final de Front End Dinâmico (JS DOM) - Sistema de Cadastro e Login ✅
 
-Uma aplicação web moderna e responsiva para cadastro e login de usuários, desenvolvida com HTML5, CSS3 e JavaScript puro. **Implementação completa do exercício proposto.**
+## Grupo 3 - Alunos 👥
 
-## 👥 Grupo 3 - Alunos:
    - Bruno Nyland
    - Danilo Lima
    - Jean Coelho
    - Marcos Ceo
 
+## 🚀 Instruções 
+
+- Para rodar a api e o site deverá ter o NodeJS instalado
+   https://nodejs.org/en/download
+- Instale as dependencias do NodeJS com o comando abaixo:
+   cd api
+   npm install
+- Para iniciar o servidor rode:
+   Na pasta raiz: node api/index.js
+   Na pasta api: node index.js
+- Acesse o site pela url: http://localhost:3000/ ou http://127.0.0.1:3000/
+
 ## 🎯 Funcionalidades Implementadas
 
-- ✅ **Página Inicial** com campo de email e botão "Avançar"
-- ✅ **Verificação de E-mail** com API fictícia
-- ✅ **Fluxo Condicional** baseado na existência do email
+- ✅ **Página Inicial SPA** com campo de email e botão "Avançar" que ao digitar verifica a existencia do email na api, caso não exista segue para cadastro, caso contrário segue para login (solita a senha)
 - ✅ **Formulário de Cadastro** completo com todos os campos
 - ✅ **Validações e Formatações** em todos os campos
 - ✅ **Envio de Dados** para API no formato JSON
@@ -22,16 +31,6 @@ Uma aplicação web moderna e responsiva para cadastro e login de usuários, des
 - ✅ **Edição de Dados** após login
 - ✅ **SPA (Single Page Application)** com navegação fluida
 - ✅ **Interface Responsiva** para desktop e mobile
-
-## 📋 Campos de Cadastro
-
-- **Email** (pré-preenchido e não editável)
-- **Nome** (mínimo 2 caracteres)
-- **Telefone** (com máscara brasileira)
-- **Endereço** (mínimo 5 caracteres)
-- **CPF** (com validação completa e máscara)
-- **Senha** (mínimo 6 caracteres)
-- **Confirmação de Senha**
 
 ## 🔧 Validações Implementadas
 
@@ -43,64 +42,12 @@ Uma aplicação web moderna e responsiva para cadastro e login de usuários, des
 - **Senha**: Mínimo 6 caracteres
 - **Confirmação**: Deve coincidir com a senha
 
-## 🎨 Design
+## 🔧 Modificações realizadas na API do professor
 
-- **Cores**: Paleta da Caixa Econômica Federal (azul e branco)
-- **Tipografia**: Segoe UI, moderna e legível
-- **Animações**: Transições suaves e loading states
-- **Responsividade**: Layout adaptável para todos os dispositivos
+- **CORS (Cross-Origin Resource Sharing)**: CORS  é um mecanismo de segurança que permite que navegadores permitam que uma aplicação web acesse recursos de uma origem (domínio, protocolo, ou porta) diferente da sua. Adicionei para poder acessar a API por um dominio diferente. 
 
-## 🚀 Como Usar
+- **Servidor de Arquivos Estáticos com o Express**: Para servir os arquivos do site da pasta raiz do projeto juntamente com a API
 
-1. **Abra o arquivo** `index.html` em qualquer navegador moderno
-2. **Digite seu email** na tela inicial
-3. **Se for novo usuário**: Preencha o formulário de cadastro
-4. **Se já cadastrado**: Digite sua senha para fazer login
-5. **Gerencie seu perfil**: Visualize e edite seus dados
 
-## 📁 Estrutura do Projeto
 
-```
-caixaverso/
-├── index.html      # Estrutura HTML da aplicação
-├── styles.css      # Estilos CSS responsivos
-└── script.js       # Lógica JavaScript da aplicação
-```
 
-## 🛠️ Tecnologias Utilizadas
-
-- **HTML5**: Semântica e estrutura
-- **CSS3**: Flexbox, Grid, animações e responsividade
-- **JavaScript ES6+**: Classes, async/await, localStorage
-- **Regex**: Validações de formato
-- **SPA Pattern**: Navegação sem reload
-
-## 🎯 Diferenciais Implementados
-
-- **Interface Moderna**: Design inspirado na Caixa Econômica Federal
-- **Validações em Tempo Real**: Feedback imediato para o usuário
-- **Máscaras Automáticas**: Para CPF e telefone
-- **Estados de Loading**: Animações durante processamento
-- **Mensagens de Sucesso/Erro**: Feedback visual claro
-- **Responsividade Total**: Funciona em todos os dispositivos
-- **Código Organizado**: Estrutura modular com classes
-- **Simulação de API**: Com delays realistas
-
-## 📝 Arquitetura
-
-### Classes Implementadas:
-- **LocalStorageManager**: Gerenciamento de dados locais
-- **Validator**: Validações de campos
-- **APISimulator**: Simulação de API com async/await
-- **CaixaversoApp**: Classe principal da aplicação
-
-### Funcionalidades Técnicas:
-- Navegação SPA sem reload
-- Event listeners para interatividade
-- Manipulação DOM eficiente
-- Design patterns modernos
-- Tratamento de erros robusto
-
----
-
-**✅ Exercício implementado com sucesso! Todos os requisitos foram atendidos e superados com funcionalidades extras.**

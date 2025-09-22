@@ -1,6 +1,4 @@
-# CaixaVerso API 🚀
-
-API RESTful para sistema de cadastro e autenticação de usuários, desenvolvida em Node.js com Express.
+# API RESTful para sistema de cadastro e autenticação de usuários
 
 ## 📋 Índice
 
@@ -277,23 +275,3 @@ O projeto inclui um frontend completo em `../index.html` que consome esta API.
 
 ---
 
-## 📝 Notas Importantes
-
-- ⚠️ **JWT Secret**: Atualmente usando chave fixa para desenvolvimento. Em produção, use variáveis de ambiente.
-- 💾 **Armazenamento**: Dados salvos em arquivo JSON local. Para produção, considere usar banco de dados.
-- 🔒 **Senhas**: Armazenadas em texto plano. Em produção, use hash (bcrypt).
-- 🌐 **CORS**: Não configurado. Adicione conforme necessário.
-
----
-
-## 🤝 Contribuição
-
-1. Faça fork do projeto
-2. Crie uma branch para sua feature
-3. Commit suas mudanças
-4. Push para a branch
-5. Abra um Pull Request
-
----
-
-**✅ API desenvolvida como parte do projeto CaixaVerso - Sistema de Cadastro e Login**
