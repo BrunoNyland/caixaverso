@@ -12,8 +12,10 @@
 - Para rodar a api e o site deverá ter o NodeJS instalado
    https://nodejs.org/en/download
 - Instale as dependencias do NodeJS com o comando abaixo:
+```
    cd api
    npm install
+```
 - Para iniciar o servidor rode:
    Na pasta raiz: node api/index.js
    Na pasta api: node index.js
@@ -28,11 +30,11 @@
 
 ## 🔧 Validações Implementadas
 
-- **Email**: Formato válido de email
-- **CPF**: Algoritmo de validação brasileiro completo
-- **Telefone**: Formato brasileiro (11) 99999-9999
-- **Nome**: Mínimo 2 caracteres, apenas letras e espaços
-- **Endereço**: Mínimo 5 caracteres
+- **Email**: Formato aaa@dominio.ext (input só lowercase)
+- **CPF**: No formato 000.000.000-00 e verificação de dígito
+- **Telefone**: Formato (00) 0000-0000 (aceitando tanto 10 números para telefones fixos, como 11 números para celulares)
+- **Nome**: Mínimo 2 caracteres, apenas letras e espaços (input só uppercase)
+- **Endereço**: Mínimo 5 caracteres (input só uppercase)
 - **Senha**: Mínimo 6 caracteres
 - **Confirmação de Senha**: Deve coincidir com a senha
 
