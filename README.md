@@ -17,7 +17,7 @@
    npm install
 ```
 - Para iniciar o servidor rode:
-   Na pasta raiz: node api/index.js
+   Na pasta raiz: ```node api/index.js```
    Na pasta api: node index.js
 - Acesse o site pela url: http://localhost:3000/ ou http://127.0.0.1:3000/
 
